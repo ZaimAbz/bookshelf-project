@@ -46,17 +46,44 @@ function orderBtn() {
     );
   });
 }
-function moveUp(id) {
-  console.log(`move up ${id}`);
+
+function canMove(element, direction) {
+  if (
+    element.parentElement.firstElementChild === element &&
+    direction === "up"
+  ) {
+    return false;
+  } else if (
+    element.parentElement.lastElementChild === element &&
+    direction === "down"
+  ) {
+    return false;
+  } else {
+    return true;
+  }
 }
-function moveDown(id) {
-  console.log(`move Down ${id}`);
+
+function reOrdering(element, direction) {
+  if (canMove(element, direction)) {
+    if (direction === "up") {
+      element.parentElement.insertBefore(element, element.previousSibling);
+    } else if (direction === "down") {
+      element.parentElement.insertBefore(element.nextSibling, element);
+    }
+  }
+}
+
+function move(event) {
+  if (event.target.textContent === "⬆") {
+    reOrdering(event.target.parentElement, "up");
+  } else if (event.target.textContent === "⬇") {
+    reOrdering(event.target.parentElement, "down");
+  }
 }
 
 function organiseShelf() {
   var parentUl = document.getElementById("book-list");
-  parentUl.addEventListener("click", function(e) {
-    moveUp(e.target.textContent);
-    moverDown(e.target.textContent);
+  parentUl.addEventListener("click", function(event) {
+    move(event);
   });
 }
